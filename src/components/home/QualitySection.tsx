@@ -18,8 +18,10 @@ const qualityPoints = [
 
 export function QualitySection() {
   return (
-    <section className="bg-forest text-white py-20 sm:py-24 lg:py-28">
-      <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+    <section className="relative overflow-hidden bg-forest-deep text-white py-20 sm:py-24 lg:py-28">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(125,188,36,0.14),transparent_42%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(245,176,65,0.1),transparent_40%)]" />
+      <Container className="relative z-[1] grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <Reveal>
           <SectionHeading
             eyebrow="Quality & Food Safety"

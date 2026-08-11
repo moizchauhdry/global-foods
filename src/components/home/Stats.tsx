@@ -44,8 +44,8 @@ function StatCard({
   const count = useCountUp(value, active);
 
   return (
-    <div className="border-t border-line pt-6">
-      <p className="font-display text-4xl tracking-tight text-forest-deep sm:text-5xl">
+    <div className="lift-card border border-line bg-paper/70 p-5 pt-6 backdrop-blur-sm">
+      <p className="font-display text-4xl font-semibold tracking-tight text-forest-deep sm:text-5xl">
         {count.toLocaleString()}
         {suffix}
       </p>
@@ -62,8 +62,9 @@ export function Stats() {
   const inView = useInView(ref, { once: true, amount: 0.35 });
 
   return (
-    <section ref={ref} className="bg-beige py-16 sm:py-20">
-      <Container>
+    <section ref={ref} className="relative overflow-hidden bg-beige py-16 sm:py-20">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.55),transparent_70%)]" />
+      <Container className="relative z-[1]">
         <p className="mb-10 max-w-2xl text-sm text-muted">
           Editable placeholder statistics for layout and storytelling. Replace
           with verified company figures before public launch.
@@ -72,7 +73,7 @@ export function Stats() {
           initial={{ opacity: 0, y: 18 }}
           animate={inView ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5"
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5"
         >
           {statistics.map((stat) => (
             <StatCard

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Reveal } from "@/src/components/animations/Reveal";
+import { ParallaxImage } from "@/src/components/animations/ParallaxImage";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
@@ -7,21 +7,19 @@ import { images } from "@/src/data/images";
 
 export function CompanyIntro() {
   return (
-    <section className="py-20 sm:py-24 lg:py-28">
+    <section className="texture-soft py-20 sm:py-24 lg:py-28">
       <Container className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        <Reveal>
-          <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[5/4] lg:aspect-[4/5]">
-            <Image
-              src={images.livestock.src}
-              alt={images.livestock.alt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
+        <Reveal blur>
+          <ParallaxImage
+            src={images.livestock.src}
+            alt={images.livestock.alt}
+            className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            intensity={12}
+          />
         </Reveal>
 
-        <Reveal delay={0.08}>
+        <Reveal delay={0.1}>
           <SectionHeading
             eyebrow="Who We Are"
             title="From Farm to Global Table"

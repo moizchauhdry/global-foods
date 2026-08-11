@@ -30,14 +30,14 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 text-white transition-[background-color,box-shadow,backdrop-filter] duration-500",
         scrolled || open
-          ? "bg-forest-deep/95 text-white shadow-[0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md"
-          : "bg-transparent text-white",
+          ? "bg-forest-deep/92 shadow-[0_10px_40px_-24px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+          : "bg-transparent",
       )}
     >
       <Container className="flex h-16 items-center justify-between gap-6 sm:h-20">
-        <div className="rounded-sm bg-white/95 px-2.5 py-1.5 shadow-sm backdrop-blur-sm">
+        <div className="rounded-sm bg-white/95 px-2.5 py-1.5 shadow-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-0.5">
           <BrandLogo
             priority
             variant="compact"
