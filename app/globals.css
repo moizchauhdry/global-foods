@@ -1,26 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Umme Yusra brand system */
+  --background: #fafbf8;
+  --foreground: #333333;
+  --forest: #1b851b;
+  --forest-deep: #145a14;
+  --sage: #7dbc24;
+  --beige: #f3f6ee;
+  --cream: #fafbf8;
+  --charcoal: #333333;
+  --muted: #666666;
+  --paper: #ffffff;
+  --line: rgba(51, 51, 51, 0.12);
+  --gold: #f5b041;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-sage: var(--sage);
+  --color-beige: var(--beige);
+  --color-cream: var(--cream);
+  --color-charcoal: var(--charcoal);
+  --color-muted: var(--muted);
+  --color-paper: var(--paper);
+  --color-line: var(--line);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display-family);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), sans-serif;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--sage) 35%, white);
+  color: var(--forest-deep);
+}
+
+.geometric-pattern {
+  background-image:
+    linear-gradient(rgba(27, 133, 27, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 133, 27, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.halal-motif {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(245, 176, 65, 0.14), transparent 28%),
+    radial-gradient(circle at 80% 10%, rgba(125, 188, 36, 0.12), transparent 26%),
+    linear-gradient(135deg, rgba(27, 133, 27, 0.04) 0%, transparent 45%);
 }
