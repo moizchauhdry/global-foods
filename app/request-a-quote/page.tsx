@@ -25,8 +25,8 @@ export default function RequestQuotePage() {
           <div className="border border-line bg-paper p-6 sm:p-10">
             <h2 className="font-display text-3xl text-forest-deep">Quotation Form</h2>
             <p className="mt-3 text-sm text-muted">
-              This form is designed for procurement and import teams. Connect it to your
-              export CRM or email workflow before production use.
+              This form is designed for procurement and import teams. Submit your
+              requirements and our export team will follow up by email.
             </p>
             <div className="mt-8">
               <QuoteForm />

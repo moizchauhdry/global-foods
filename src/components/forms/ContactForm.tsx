@@ -30,6 +30,8 @@ export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [success, setSuccess] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   const update = (key: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -50,14 +52,30 @@ export function ContactForm() {
   return (
     <form
       className="space-y-5"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         setSuccess(null);
+        setSubmitError(null);
         if (!validate()) return;
-        setSuccess(
-          "Inquiry captured locally. Connect this form to your CRM or email service for production use.",
-        );
-        setForm(initialState);
+
+        setSending(true);
+        try {
+          const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(form),
+          });
+          const payload = (await response.json().catch(() => ({}))) as { error?: string };
+          if (!response.ok) {
+            throw new Error(payload.error || "Unable to send your inquiry right now.");
+          }
+          setSuccess("Thank you. Your inquiry has been sent. We will reply by email.");
+          setForm(initialState);
+        } catch (error) {
+          setSubmitError(error instanceof Error ? error.message : "Unable to send your inquiry right now.");
+        } finally {
+          setSending(false);
+        }
       }}
       noValidate
     >
@@ -87,10 +105,11 @@ export function ContactForm() {
         onChange={(e) => update("message", e.target.value)}
         error={errors.message}
       />
-      <Button type="submit" variant="primary" size="lg">
-        Send Inquiry
+      <Button type="submit" variant="primary" size="lg" disabled={sending}>
+        {sending ? "Sending…" : "Send Inquiry"}
       </Button>
       {success ? <p className="text-sm text-forest">{success}</p> : null}
+      {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
     </form>
   );
 }

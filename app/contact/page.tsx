@@ -76,7 +76,7 @@ export default function ContactPage() {
           <div className="border border-line bg-paper p-6 sm:p-8">
             <h2 className="font-display text-3xl text-forest-deep">Send Inquiry</h2>
             <p className="mt-2 text-sm text-muted">
-              All fields are validated client-side and ready for backend/CRM integration.
+              Share your requirements and our commercial team will follow up by email.
             </p>
             <div className="mt-8">
               <ContactForm />

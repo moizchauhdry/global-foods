@@ -15,7 +15,7 @@ export const company = {
   headquarters: "[City], Pakistan",
   address: "[Facility / Head Office Address], Pakistan",
   phone: "[+92 XXX XXXXXXX]",
-  email: "info@ummeyusra.example",
+  email: "info@ummeyusrafoods.com",
   exportEmail: "exports@ummeyusra.example",
   salesEmail: "sales@ummeyusra.example",
   website: "https://ummeyusra.example",
