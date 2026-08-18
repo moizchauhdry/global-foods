@@ -2,6 +2,8 @@
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
   "/about/page": "/about",
+  "/api/contact/route": "/api/contact",
+  "/api/quote/route": "/api/quote",
   "/apple-icon.png/route": "/apple-icon.png",
   "/careers/page": "/careers",
   "/certifications/page": "/certifications",

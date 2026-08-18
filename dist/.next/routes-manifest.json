@@ -65,6 +65,18 @@
       "namedRegex": "^/about(?:/)?$"
     },
     {
+      "page": "/api/contact",
+      "regex": "^/api/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
+      "page": "/api/quote",
+      "regex": "^/api/quote(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/quote(?:/)?$"
+    },
+    {
       "page": "/apple-icon.png",
       "regex": "^/apple\\-icon\\.png(?:/)?$",
       "routeKeys": {},
