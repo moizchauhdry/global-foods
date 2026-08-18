@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useIsClient } from "@/src/lib/use-is-client";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
@@ -13,7 +14,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -21,10 +22,6 @@ export function Hero() {
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.35]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <section

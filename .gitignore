@@ -13,12 +13,18 @@
 # testing
 /coverage
 
-# next.js
-/.next/
+# next.js — root build only; dist/.next is committed on main
+/.next
 /out/
 
 # production
 /build
+
+# Do NOT ignore dist/ (tracked on main only)
+# dist/
+
+# Passenger restart trigger on cPanel
+tmp/
 
 # misc
 .DS_Store

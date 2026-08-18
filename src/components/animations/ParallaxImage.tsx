@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { cn } from "@/src/lib/cn";
+import { useIsClient } from "@/src/lib/use-is-client";
 
 type Props = {
   src: string;
@@ -23,17 +24,13 @@ export function ParallaxImage({
   intensity = 18,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], [`-${intensity}%`, `${intensity}%`]);
   const scale = useTransform(scrollYProgress, [0, 1], [1.12, 1.04]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <div ref={ref} className={cn("media-frame relative overflow-hidden", className)}>
