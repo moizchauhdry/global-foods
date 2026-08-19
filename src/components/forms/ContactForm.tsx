@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Check } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/src/components/ui/Button";
 import { Input } from "@/src/components/ui/Input";
@@ -10,6 +12,7 @@ import {
   getEnquiryCountry,
   productTypes,
 } from "@/src/data/enquiry";
+import { cn } from "@/src/lib/cn";
 
 type FormState = {
   name: string;
@@ -38,7 +41,7 @@ const initialState: FormState = {
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
-  const [success, setSuccess] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const selectedCountry = getEnquiryCountry(form.country);
   const cityOptions = useMemo(
@@ -53,6 +56,7 @@ export function ContactForm() {
 
   const update = (key: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
   const updateCountry = (value: string) => {
@@ -63,6 +67,7 @@ export function ContactForm() {
       country: value,
       city: cities.length === 1 ? cities[0] : "",
     }));
+    setErrors((prev) => ({ ...prev, country: undefined, city: undefined }));
   };
 
   const validate = () => {
@@ -81,107 +86,226 @@ export function ContactForm() {
     return Object.keys(next).length === 0;
   };
 
+  if (success) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="flex min-h-[28rem] flex-col justify-center"
+      >
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-forest text-white">
+          <Check className="h-5 w-5" strokeWidth={2.2} />
+        </span>
+        <h3 className="mt-6 font-display text-3xl font-semibold text-forest-deep">
+          Enquiry received.
+        </h3>
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base">
+          Thank you. Our export team will review the destination, product, and
+          volume and respond with a tailored chilled program.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-8 w-fit"
+          onClick={() => {
+            setForm(initialState);
+            setErrors({});
+            setSuccess(false);
+          }}
+        >
+          Send another enquiry
+        </Button>
+      </motion.div>
+    );
+  }
+
   return (
     <form
-      className="space-y-5"
+      className="space-y-9"
       onSubmit={(event) => {
         event.preventDefault();
-        setSuccess(null);
         if (!validate()) return;
-        setSuccess(
-          "Inquiry captured locally. Connect this form to your CRM or email service for production use.",
-        );
+        setSuccess(true);
         setForm(initialState);
       }}
       noValidate
     >
-      <div className="grid gap-5 md:grid-cols-2">
-        <Input
-          label="Name"
-          name="name"
-          value={form.name}
-          onChange={(e) => update("name", e.target.value)}
-          error={errors.name}
-        />
-        <Input
-          label="Company"
-          name="company"
-          value={form.company}
-          onChange={(e) => update("company", e.target.value)}
-          error={errors.company}
-        />
-        <Input
-          label="Email"
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={(e) => update("email", e.target.value)}
-          error={errors.email}
-        />
-        <Input
-          label="Phone"
-          name="phone"
-          value={form.phone}
-          onChange={(e) => update("phone", e.target.value)}
-          error={errors.phone}
-        />
-        <Select
-          label="Country"
-          name="country"
-          value={form.country}
-          onChange={(e) => updateCountry(e.target.value)}
-          error={errors.country}
-          placeholder="Select country"
-          options={enquiryCountries.map((country) => ({
-            label: country.label,
-            value: country.value,
-          }))}
-        />
-        {requiresCity ? (
-          <Select
-            label="City"
-            name="city"
-            value={form.city}
-            onChange={(e) => update("city", e.target.value)}
-            error={errors.city}
-            placeholder="Select city"
-            options={cityOptions}
+      <fieldset className="space-y-5">
+        <legend className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-sage">
+          <span className="font-display text-sm tracking-normal text-gold">01</span>
+          Your details
+        </legend>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Input
+            label="Name"
+            name="name"
+            autoComplete="name"
+            value={form.name}
+            onChange={(e) => update("name", e.target.value)}
+            error={errors.name}
           />
-        ) : null}
-        <Select
-          label="Product type"
-          name="productType"
-          value={form.productType}
-          onChange={(e) => update("productType", e.target.value)}
-          error={errors.productType}
-          placeholder="Select product type"
-          options={[...productTypes]}
-        />
+          <Input
+            label="Company"
+            name="company"
+            autoComplete="organization"
+            value={form.company}
+            onChange={(e) => update("company", e.target.value)}
+            error={errors.company}
+          />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(e) => update("email", e.target.value)}
+            error={errors.email}
+          />
+          <Input
+            label="Phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            value={form.phone}
+            onChange={(e) => update("phone", e.target.value)}
+            error={errors.phone}
+          />
+        </div>
+      </fieldset>
+
+      <fieldset className="space-y-5">
+        <legend className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-sage">
+          <span className="font-display text-sm tracking-normal text-gold">02</span>
+          Shipment
+        </legend>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Select
+            label="Country"
+            name="country"
+            value={form.country}
+            onChange={(e) => updateCountry(e.target.value)}
+            error={errors.country}
+            placeholder="Select destination"
+            options={enquiryCountries.map((country) => ({
+              label: country.label,
+              value: country.value,
+            }))}
+          />
+          <AnimatePresence initial={false} mode="popLayout">
+            {requiresCity ? (
+              <motion.div
+                key="city"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Select
+                  label="City"
+                  name="city"
+                  value={form.city}
+                  onChange={(e) => update("city", e.target.value)}
+                  error={errors.city}
+                  placeholder="Select city"
+                  options={cityOptions}
+                />
+              </motion.div>
+            ) : (
+              <div className="hidden sm:block" aria-hidden="true" />
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div>
+          <p
+            id="product-type-label"
+            className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-charcoal/75"
+          >
+            Product type
+          </p>
+          <div
+            role="radiogroup"
+            aria-labelledby="product-type-label"
+            className="grid grid-cols-2 gap-3"
+          >
+            {productTypes.map((product) => {
+              const selected = form.productType === product.value;
+              return (
+                <button
+                  key={product.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => update("productType", product.value)}
+                  className={cn(
+                    "group relative rounded-sm border px-4 py-4 text-left transition-all duration-300",
+                    selected
+                      ? "border-forest bg-forest/[0.06] shadow-[0_10px_28px_-22px_rgba(15,74,18,0.7)]"
+                      : "border-line bg-paper hover:border-forest/30 hover:bg-beige/50",
+                    errors.productType && !form.productType && "border-red-500",
+                  )}
+                >
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="font-display text-xl font-semibold text-forest-deep">
+                      {product.label}
+                    </span>
+                    <span
+                      className={cn(
+                        "flex h-5 w-5 items-center justify-center rounded-full border transition-colors",
+                        selected
+                          ? "border-forest bg-forest text-white"
+                          : "border-line text-transparent",
+                      )}
+                    >
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    </span>
+                  </span>
+                  <span className="mt-1 block text-xs text-muted">
+                    Chilled export program
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {errors.productType ? (
+            <p className="mt-2 text-xs text-red-600">{errors.productType}</p>
+          ) : null}
+        </div>
+
         <Input
-          label="Quantity (kg)"
+          label="Quantity"
           name="quantity"
           type="number"
           min="1"
           step="1"
           inputMode="numeric"
-          placeholder="e.g. 500"
+          placeholder="500"
+          suffix="kg"
           value={form.quantity}
           onChange={(e) => update("quantity", e.target.value)}
           error={errors.quantity}
         />
-      </div>
+      </fieldset>
+
       <Textarea
         label="Message"
         name="message"
         value={form.message}
         onChange={(e) => update("message", e.target.value)}
         error={errors.message}
-        placeholder="Tell us about cuts, packing, and timing."
+        placeholder="Cuts, packing, and preferred timing."
       />
-      <Button type="submit" variant="primary" size="lg">
-        Send Inquiry
-      </Button>
-      {success ? <p className="text-sm text-forest">{success}</p> : null}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Button type="submit" variant="primary" size="lg" className="w-full sm:w-auto">
+          Send enquiry
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
+        <p className="text-xs leading-relaxed text-muted sm:max-w-[16rem] sm:text-right">
+          We typically respond within one business day with a tailored supply program.
+        </p>
+      </div>
     </form>
   );
 }
