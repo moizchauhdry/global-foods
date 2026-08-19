@@ -11,10 +11,12 @@ export async function POST(request: Request) {
     const email = readString(body.email, 160);
     const phone = readString(body.phone, 80);
     const country = readString(body.country, 80);
-    const inquiryType = readString(body.inquiryType, 80) || "General";
+    const city = readString(body.city, 80);
+    const productType = readString(body.productType, 80);
+    const quantity = readString(body.quantity, 40);
     const message = readString(body.message, 5000);
 
-    if (!name || !company || !phone || !country || !message) {
+    if (!name || !company || !phone || !country || !productType || !quantity || !message) {
       return NextResponse.json({ ok: false, error: "Please complete all required fields." }, { status: 400 });
     }
     if (!isValidEmail(email)) {
@@ -22,7 +24,7 @@ export async function POST(request: Request) {
     }
 
     await sendNotificationEmail({
-      subject: `Website inquiry from ${name} — ${inquiryType}`,
+      subject: `Website inquiry from ${name} — ${productType}`,
       replyTo: email,
       fields: [
         ["Name", name],
@@ -30,7 +32,9 @@ export async function POST(request: Request) {
         ["Email", email],
         ["Phone", phone],
         ["Country", country],
-        ["Inquiry type", inquiryType],
+        ["City", city || "—"],
+        ["Product type", productType],
+        ["Quantity (kg)", quantity],
       ],
       message,
     });

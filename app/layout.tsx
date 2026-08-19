@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import { ScrollProgress } from "@/src/components/animations/ScrollProgress";
+import { SmoothHashScroll } from "@/src/components/animations/SmoothHashScroll";
 import { Footer } from "@/src/components/layout/Footer";
 import { Navbar } from "@/src/components/layout/Navbar";
+import { SectionDots } from "@/src/components/layout/SectionDots";
 import { JsonLd } from "@/src/components/seo/JsonLd";
 import { company } from "@/src/data/company";
 import "./globals.css";
@@ -64,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       "@type": "PostalAddress",
       addressCountry: "PK",
       addressLocality: company.headquarters,
+      postalCode: company.postalCode,
       streetAddress: company.address,
     },
     email: company.email,
@@ -79,8 +82,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col font-sans" suppressHydrationWarning>
         <JsonLd data={organizationSchema} />
+        <SmoothHashScroll />
         <ScrollProgress />
         <Navbar />
+        <SectionDots />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
