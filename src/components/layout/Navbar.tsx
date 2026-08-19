@@ -1,13 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Mail, Menu, Phone, X } from "lucide-react";
 import { BrandLogo } from "@/src/components/shared/BrandLogo";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
 import { company, navLinks } from "@/src/data/company";
 import { cn } from "@/src/lib/cn";
+import { smoothSpring } from "@/src/lib/motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const phoneHref = `tel:${company.phone.replace(/\s+/g, "")}`;
@@ -15,15 +23,12 @@ const emailHref = `mailto:${company.email}`;
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("#home");
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const reduceMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  const rawLayer = useTransform(scrollY, [0, 96], [0, 1]);
+  const smoothLayer = useSpring(rawLayer, smoothSpring);
+  const layerOpacity = reduceMotion ? rawLayer : smoothLayer;
 
   useEffect(() => {
     document.documentElement.classList.toggle("overflow-hidden", open);
@@ -67,15 +72,13 @@ export function Navbar() {
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 text-white">
-      <div
-        className={cn(
-          "pointer-events-auto relative z-50 border-b pt-[env(safe-area-inset-top)] transition-colors duration-300",
-          scrolled || open
-            ? "border-white/10 bg-forest-deep"
-            : "border-transparent bg-transparent",
-        )}
-      >
-        <Container className="flex h-16 items-center justify-between gap-3 sm:h-20 sm:gap-6">
+      <div className="pointer-events-auto relative z-50 pt-[env(safe-area-inset-top)]">
+        <motion.div
+          aria-hidden
+          className="nav-sticky-layer absolute inset-0"
+          style={{ opacity: open ? 1 : layerOpacity }}
+        />
+        <Container className="relative flex h-16 items-center justify-between gap-3 sm:h-20 sm:gap-6">
           <div className="min-w-0 rounded-sm bg-white px-2 py-1.5 sm:px-2.5">
             <BrandLogo
               priority
