@@ -13,9 +13,9 @@ type Props = {
 };
 
 const offsets = {
-  up: { y: 32, x: 0 },
-  left: { x: 36, y: 0 },
-  right: { x: -36, y: 0 },
+  up: { y: 18, x: 0 },
+  left: { x: 18, y: 0 },
+  right: { x: -18, y: 0 },
   none: { x: 0, y: 0 },
 } as const;
 
@@ -24,7 +24,7 @@ export function Reveal({
   className,
   delay = 0,
   direction = "up",
-  duration = 0.8,
+  duration = 0.9,
   blur = false,
 }: Props) {
   const offset = offsets[direction];
@@ -33,7 +33,7 @@ export function Reveal({
     hidden: {
       opacity: 0,
       ...offset,
-      ...(blur ? { filter: "blur(8px)" } : {}),
+      ...(blur ? { filter: "blur(4px)" } : {}),
     },
     visible: {
       opacity: 1,

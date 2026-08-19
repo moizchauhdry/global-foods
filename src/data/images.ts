@@ -1,91 +1,98 @@
 /**
- * Centralized image URLs — replace with company photography when available.
+ * Local photography from /public/images.
  * Halal-safe only: cattle, sheep/goat, beef/mutton product imagery.
- * Do NOT use pig/pork imagery.
  */
 export const images = {
-  hero: {
-    src: "https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=2400&q=80",
-    alt: "Healthy cattle grazing in lush green pasture",
+  logo: {
+    src: "/images/logo.png",
+    alt: "Umme Yusra Global Foods (Pvt) Limited",
   },
-  livestock: {
-    src: "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=1600&q=80",
-    alt: "Healthy cattle on pastureland",
+  slaughterHouse: {
+    src: "/images/slaughter-house.jpeg",
+    alt: "Hygienic halal processing floor with stainless production lines",
   },
-  farm: {
-    src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80",
-    alt: "Expansive agricultural farmland landscape",
+  packagingLine: {
+    src: "/images/slaughter-house-2.jpeg",
+    alt: "Vacuum packaging line sealing premium beef steaks",
   },
-  cattleClose: {
-    src: "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=1600&q=80",
-    alt: "Close view of cattle in a managed farm environment",
+  beefProcessing: {
+    src: "/images/beef-1.jpeg",
+    alt: "Premium beef cuts prepared on a stainless processing table",
   },
-  sheep: {
-    src: "https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=1600&q=80",
-    alt: "Cattle herd representing livestock sourcing programs",
+  beefCuts: {
+    src: "/images/beef-2.jpeg",
+    alt: "Export-ready premium beef steaks, roast, and medallions",
   },
-  meatCuts: {
-    src: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=1600&q=80",
-    alt: "Fresh premium beef steaks prepared for processing",
+  muttonProcessing: {
+    src: "/images/mutton-1.jpeg",
+    alt: "Mutton racks, steaks, and a leg roast prepared for packing",
   },
-  steak: {
-    src: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1600&q=80",
-    alt: "Premium grilled beef steak highlighting product quality",
+  muttonFacility: {
+    src: "/images/mutton-2.jpeg",
+    alt: "Mutton and beef cuts staged in a hygienic processing hall",
   },
-  packaging: {
-    src: "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=1600&q=80",
-    alt: "Premium cooked beef cut ready for presentation and packaging",
+  muttonCuts: {
+    src: "/images/mutton-3.jpeg",
+    alt: "Premium mutton chops, leg, roast, and rack of lamb",
   },
-  coldStorage: {
-    src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80",
-    alt: "Industrial cold storage and warehouse facility",
-  },
-  logistics: {
-    src: "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&w=1600&q=80",
-    alt: "Shipping containers prepared for international logistics",
-  },
-  port: {
-    src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80",
-    alt: "Cargo ship and port logistics operations",
+  muttonSelection: {
+    src: "/images/mutton-4.jpeg",
+    alt: "Gourmet mutton chops, racks, and roast on a slate platter",
   },
   inspection: {
-    src: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1600&q=80",
-    alt: "Laboratory quality testing environment",
+    src: "/images/meat-inspection.jpeg",
+    alt: "Quality technician checking meat temperature in the inspection room",
   },
-  animalHealth: {
-    src: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1600&q=80",
-    alt: "Technician performing laboratory testing for animal health and inspection",
+  coldStorage: {
+    src: "/images/cold-storage.jpeg",
+    alt: "Temperature-controlled cold storage warehouse with pallet racking",
   },
-  team: {
-    src: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1600&q=80",
-    alt: "Professional team collaborating in a modern workplace",
-  },
-  facility: {
-    src: "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1600&q=80",
-    alt: "Modern industrial processing facility exterior",
-  },
-  workers: {
-    src: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80",
-    alt: "Professionals working in a modern industrial environment",
-  },
-  community: {
-    src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80",
-    alt: "Community members working together outdoors",
-  },
-  sustainability: {
-    src: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1600&q=80",
-    alt: "Sustainable green farmland landscape",
-  },
-  farmingPractice: {
-    src: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1600&q=80",
-    alt: "Responsible farming practices in open fields",
-  },
-  pasture: {
-    src: "https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=1600&q=80",
-    alt: "Cattle grazing in natural pasture",
-  },
-  beefPlatter: {
-    src: "https://images.unsplash.com/photo-1615937722923-67f6deaf2cc9?auto=format&fit=crop&w=1600&q=80",
-    alt: "Premium beef steak platter for export presentation",
+  export: {
+    src: "/images/export-container.jpeg",
+    alt: "Refrigerated export container being loaded at port at sunset",
   },
 } as const;
+
+export const productGallery = [
+  {
+    ...images.beefCuts,
+    title: "Premium Beef",
+    caption: "Ribeye, tenderloin, and export steaks cut for international buyers.",
+  },
+  {
+    ...images.muttonProcessing,
+    title: "Mutton Programs",
+    caption: "Racks, legs, and primal cuts prepared under hygienic controls.",
+  },
+  {
+    ...images.muttonCuts,
+    title: "Signature Mutton",
+    caption: "Chops, roast, and rack selections for premium market programs.",
+  },
+  {
+    ...images.muttonSelection,
+    title: "Gourmet Selection",
+    caption: "Presentation-ready cuts for foodservice and retail partners.",
+  },
+] as const;
+
+export const facilityStory = [
+  {
+    ...images.packagingLine,
+    kicker: "01 — Processing",
+    title: "Hygienic lines. Export-ready packs.",
+    body: "Stainless processing and vacuum packaging keep product integrity from the line to the carton.",
+  },
+  {
+    ...images.inspection,
+    kicker: "02 — Inspection",
+    title: "Quality checked at every handoff.",
+    body: "Temperature, trim, and documentation checks support the food-safety discipline international buyers expect.",
+  },
+  {
+    ...images.coldStorage,
+    kicker: "03 — Cold chain",
+    title: "Held at temperature until dispatch.",
+    body: "Chilled storage and organised dispatch protect condition from the facility through to the container.",
+  },
+] as const;

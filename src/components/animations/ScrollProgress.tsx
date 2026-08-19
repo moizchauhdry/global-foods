@@ -7,9 +7,10 @@ export function ScrollProgress() {
   const mounted = useIsClient();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
+    stiffness: 72,
     damping: 28,
-    restDelta: 0.001,
+    mass: 0.38,
+    restDelta: 0.0005,
   });
 
   if (!mounted) {
