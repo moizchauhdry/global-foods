@@ -1,28 +1,38 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useTransform } from "framer-motion";
-import type { MotionValue } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { useRef } from "react";
 import { facilityStory } from "@/src/data/images";
 import { useSmoothedProgress } from "@/src/lib/motion";
+import { cn } from "@/src/lib/cn";
+
+const total = facilityStory.length;
 
 export function FacilityStory() {
   const ref = useRef<HTMLElement>(null);
   const progress = useSmoothedProgress(ref, ["start start", "end end"]);
+  const barScale = useTransform(progress, [0, 1], [0.06, 1]);
+  const chapter = useTransform(progress, (value) =>
+    String(Math.min(total, Math.floor(value * total - 0.001) + 1)).padStart(2, "0"),
+  );
 
   return (
     <section
       id="facility"
       ref={ref}
-      className="relative h-[260vh] bg-charcoal text-white"
+      className="relative h-[320vh] bg-charcoal text-white"
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {facilityStory.map((slide, index) => (
           <Slide
             key={slide.src}
             index={index}
-            total={facilityStory.length}
             progress={progress}
             src={slide.src}
             alt={slide.alt}
@@ -32,24 +42,53 @@ export function FacilityStory() {
           />
         ))}
 
-        <div className="pointer-events-none absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 flex-col gap-3 sm:flex">
-          {facilityStory.map((slide, index) => (
-            <StepMark
-              key={slide.kicker}
-              index={index}
-              total={facilityStory.length}
-              progress={progress}
-            />
-          ))}
+        <ChapterRail progress={progress} />
+
+        <div className="absolute inset-x-0 bottom-0 z-20 px-5 pb-7 sm:px-8 lg:px-10">
+          <div className="flex items-end justify-between gap-6">
+            <p className="font-display text-sm tracking-[0.18em] text-white/55">
+              <motion.span className="text-gold">{chapter}</motion.span>
+              <span className="mx-1.5 text-white/25">/</span>
+              {String(total).padStart(2, "0")}
+            </p>
+            <div className="h-px min-w-0 flex-1 origin-left bg-white/15">
+              <motion.div
+                className="h-px origin-left bg-gold"
+                style={{ scaleX: barScale }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
+function timings(index: number) {
+  const slot = 1 / total;
+  const start = index * slot;
+  const end = (index + 1) * slot;
+  const wipeStart = Math.max(0, start - slot * 0.08);
+  const wipeEnd = Math.min(1, start + slot * 0.42);
+  const textInStart = index === 0 ? 0 : start + slot * 0.12;
+  const textInEnd = index === 0 ? slot * 0.18 : start + slot * 0.48;
+  const textOutStart = end - slot * 0.22;
+  const textOutEnd = Math.min(1, end + slot * 0.06);
+
+  return {
+    start,
+    end,
+    wipeStart,
+    wipeEnd,
+    textInStart,
+    textInEnd,
+    textOutStart,
+    textOutEnd,
+  };
+}
+
 function Slide({
   index,
-  total,
   progress,
   src,
   alt,
@@ -58,7 +97,6 @@ function Slide({
   body,
 }: {
   index: number;
-  total: number;
   progress: MotionValue<number>;
   src: string;
   alt: string;
@@ -66,80 +104,176 @@ function Slide({
   title: string;
   body: string;
 }) {
-  const slot = 1 / total;
-  const overlap = slot * 0.55;
-  const fadeInStart = Math.max(0, index * slot - overlap);
-  const fadeInEnd = index * slot + overlap * 0.35;
-  const fadeOutStart = (index + 1) * slot - overlap * 0.35;
-  const fadeOutEnd = Math.min(1, (index + 1) * slot + overlap);
+  const reduceMotion = useReducedMotion();
+  const t = timings(index);
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
-  const opacity = useTransform(
+  const clipPath = useTransform(
+    progress,
+    isFirst ? [0, 0] : [t.wipeStart, t.wipeEnd],
+    isFirst
+      ? ["inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)"]
+      : ["inset(0% 100% 0% 0%)", "inset(0% 0% 0% 0%)"],
+  );
+
+  const imageScale = useTransform(progress, [t.start, t.end], [1.12, 1.03]);
+  const imageX = useTransform(progress, [t.start, t.end], ["-2.5%", "1.5%"]);
+
+  const fade = useTransform(
     progress,
     isFirst
-      ? [0, fadeOutStart, fadeOutEnd]
+      ? [0, t.textOutStart, t.textOutEnd]
       : isLast
-        ? [fadeInStart, fadeInEnd, 1]
-        : [fadeInStart, fadeInEnd, fadeOutStart, fadeOutEnd],
-    isFirst ? [1, 1, 0] : isLast ? [0, 1, 1] : [0, 1, 1, 0],
+        ? [t.wipeStart, t.wipeEnd, 1]
+        : [t.wipeStart, t.wipeEnd, t.textOutEnd + 0.08, Math.min(1, t.textOutEnd + 0.16)],
+    isFirst ? [1, 1, 1] : isLast ? [0, 1, 1] : [0, 1, 1, 1],
   );
+
+  const kickerY = useTransform(progress, [t.textInStart, t.textInEnd], [18, 0]);
+  const titleY = useTransform(progress, [t.textInStart, t.textInEnd], [36, 0]);
+  const bodyY = useTransform(progress, [t.textInStart, t.textInEnd], [28, 0]);
+
   const textOpacity = useTransform(
     progress,
-    isFirst
-      ? [0, fadeOutStart - 0.04, fadeOutEnd]
-      : isLast
-        ? [fadeInStart, fadeInEnd, 1]
-        : [fadeInStart, fadeInEnd, fadeOutStart, fadeOutEnd],
-    isFirst ? [1, 1, 0] : isLast ? [0, 1, 1] : [0, 1, 1, 0],
+    isLast
+      ? [t.textInStart, t.textInEnd, 1]
+      : [t.textInStart, t.textInEnd, t.textOutStart, t.textOutEnd],
+    isLast ? [0, 1, 1] : [0, 1, 1, 0],
+  );
+
+  const lineScale = useTransform(
+    progress,
+    [t.textInStart, t.textInEnd],
+    [0.15, 1],
   );
 
   return (
     <motion.div
       className="absolute inset-0"
-      style={{ opacity, zIndex: index }}
+      style={{
+        zIndex: index,
+        opacity: reduceMotion ? fade : 1,
+      }}
     >
-      <div className="absolute inset-0">
-        <Image src={src} alt={alt} fill sizes="100vw" className="object-cover" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/88 via-forest-deep/45 to-forest-deep/20" />
       <motion.div
-        className="relative flex h-full max-w-xl flex-col justify-end px-5 pb-20 sm:px-10 lg:px-16"
+        className="absolute inset-0 overflow-hidden will-change-transform"
+        style={reduceMotion ? undefined : { clipPath }}
+      >
+        <motion.div
+          className="absolute inset-[-8%] h-[116%] w-[116%]"
+          style={
+            reduceMotion
+              ? undefined
+              : { scale: imageScale, x: imageX }
+          }
+        >
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/90 via-forest-deep/48 to-forest-deep/18" />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/70 via-transparent to-forest-deep/25" />
+      </motion.div>
+
+      <motion.div
+        className="relative flex h-full max-w-xl flex-col justify-end px-5 pb-24 sm:px-10 lg:px-16"
         style={{ opacity: textOpacity }}
       >
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold">
+        <motion.p
+          className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold"
+          style={reduceMotion ? undefined : { y: kickerY }}
+        >
+          <motion.span
+            className="h-px w-10 origin-left bg-gold"
+            style={reduceMotion ? undefined : { scaleX: lineScale }}
+            aria-hidden="true"
+          />
           {kicker}
-        </p>
-        <h2 className="mt-4 font-display text-3xl font-semibold leading-tight sm:text-5xl">
+        </motion.p>
+        <motion.h2
+          className="mt-4 font-display text-3xl font-semibold leading-tight sm:text-5xl lg:text-[3.15rem]"
+          style={reduceMotion ? undefined : { y: titleY }}
+        >
           {title}
-        </h2>
-        <p className="mt-4 max-w-md text-base leading-relaxed text-white/80">
+        </motion.h2>
+        <motion.p
+          className="mt-4 max-w-md text-base leading-relaxed text-white/80"
+          style={reduceMotion ? undefined : { y: bodyY }}
+        >
           {body}
-        </p>
+        </motion.p>
       </motion.div>
     </motion.div>
   );
 }
 
-function StepMark({
+function ChapterRail({ progress }: { progress: MotionValue<number> }) {
+  const fill = useTransform(progress, [0, 1], [0, 1]);
+
+  return (
+    <div className="pointer-events-none absolute right-5 top-1/2 z-20 hidden -translate-y-1/2 lg:flex">
+      <div className="relative mr-5 h-44 w-px bg-white/15">
+        <motion.span
+          className="absolute inset-x-0 top-0 origin-top bg-gold"
+          style={{ scaleY: fill, height: "100%" }}
+        />
+      </div>
+      <ol className="flex flex-col justify-between py-0.5">
+        {facilityStory.map((slide, index) => (
+          <ChapterItem
+            key={slide.kicker}
+            index={index}
+            label={slide.kicker.replace(/^\d+\s—\s/, "")}
+            progress={progress}
+          />
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function ChapterItem({
   index,
-  total,
+  label,
   progress,
 }: {
   index: number;
-  total: number;
+  label: string;
   progress: MotionValue<number>;
 }) {
   const start = index / total;
   const end = (index + 1) / total;
-  const scaleY = useTransform(progress, [start, end], [0.35, 1]);
-  const opacity = useTransform(progress, [start, end], [0.35, 1]);
+  const opacity = useTransform(progress, [start, start + 0.04, end], [0.32, 1, 1]);
+  const color = useTransform(
+    progress,
+    [start, start + 0.06, end - 0.02, end],
+    [
+      "rgba(255,255,255,0.4)",
+      "rgb(245, 176, 65)",
+      "rgb(245, 176, 65)",
+      "rgba(255,255,255,0.4)",
+    ],
+  );
 
   return (
-    <motion.span
-      className="h-10 w-px origin-top bg-gold"
-      style={{ scaleY, opacity }}
-      aria-hidden="true"
-    />
+    <motion.li
+      className={cn("text-right")}
+      style={{ opacity }}
+    >
+      <motion.p
+        className="font-display text-sm tracking-[0.16em]"
+        style={{ color }}
+      >
+        {String(index + 1).padStart(2, "0")}
+      </motion.p>
+      <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/40">
+        {label}
+      </p>
+    </motion.li>
   );
 }
