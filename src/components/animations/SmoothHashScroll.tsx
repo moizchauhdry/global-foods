@@ -47,7 +47,6 @@ export function SmoothHashScroll() {
       if (!node) return;
 
       event.preventDefault();
-      event.stopPropagation();
 
       const margin = Number.parseFloat(getComputedStyle(node).scrollMarginTop) || 0;
       const top = node.getBoundingClientRect().top + window.scrollY - margin;
