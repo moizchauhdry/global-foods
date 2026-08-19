@@ -10,7 +10,6 @@ import {
 import { useRef } from "react";
 import { facilityStory } from "@/src/data/images";
 import { useSmoothedProgress } from "@/src/lib/motion";
-import { cn } from "@/src/lib/cn";
 
 const total = facilityStory.length;
 
@@ -19,7 +18,7 @@ export function FacilityStory() {
   const progress = useSmoothedProgress(ref, ["start start", "end end"]);
   const barScale = useTransform(progress, [0, 1], [0.06, 1]);
   const chapter = useTransform(progress, (value) =>
-    String(Math.min(total, Math.floor(value * total - 0.001) + 1)).padStart(2, "0"),
+    String(Math.min(total, Math.floor(value * total) + 1)).padStart(2, "0"),
   );
 
   return (
@@ -123,29 +122,43 @@ function Slide({
   const fade = useTransform(
     progress,
     isFirst
-      ? [0, t.textOutStart, t.textOutEnd]
+      ? [0, 1]
       : isLast
         ? [t.wipeStart, t.wipeEnd, 1]
-        : [t.wipeStart, t.wipeEnd, t.textOutEnd + 0.08, Math.min(1, t.textOutEnd + 0.16)],
-    isFirst ? [1, 1, 1] : isLast ? [0, 1, 1] : [0, 1, 1, 1],
+        : [t.wipeStart, t.wipeEnd],
+    isFirst ? [1, 1] : isLast ? [0, 1, 1] : [0, 1],
   );
 
-  const kickerY = useTransform(progress, [t.textInStart, t.textInEnd], [18, 0]);
-  const titleY = useTransform(progress, [t.textInStart, t.textInEnd], [36, 0]);
-  const bodyY = useTransform(progress, [t.textInStart, t.textInEnd], [28, 0]);
+  const kickerY = useTransform(
+    progress,
+    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
+    isFirst ? [0, 0] : [18, 0],
+  );
+  const titleY = useTransform(
+    progress,
+    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
+    isFirst ? [0, 0] : [36, 0],
+  );
+  const bodyY = useTransform(
+    progress,
+    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
+    isFirst ? [0, 0] : [28, 0],
+  );
 
   const textOpacity = useTransform(
     progress,
-    isLast
-      ? [t.textInStart, t.textInEnd, 1]
-      : [t.textInStart, t.textInEnd, t.textOutStart, t.textOutEnd],
-    isLast ? [0, 1, 1] : [0, 1, 1, 0],
+    isFirst
+      ? [0, t.textOutStart, t.textOutEnd]
+      : isLast
+        ? [t.textInStart, t.textInEnd, 1]
+        : [t.textInStart, t.textInEnd, t.textOutStart, t.textOutEnd],
+    isFirst ? [1, 1, 0] : isLast ? [0, 1, 1] : [0, 1, 1, 0],
   );
 
   const lineScale = useTransform(
     progress,
-    [t.textInStart, t.textInEnd],
-    [0.15, 1],
+    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
+    isFirst ? [1, 1] : [0.15, 1],
   );
 
   return (
@@ -248,23 +261,38 @@ function ChapterItem({
 }) {
   const start = index / total;
   const end = (index + 1) / total;
-  const opacity = useTransform(progress, [start, start + 0.04, end], [0.32, 1, 1]);
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
+  const opacity = useTransform(
+    progress,
+    isFirst
+      ? [0, end - 0.02, end]
+      : isLast
+        ? [start, start + 0.05, 1]
+        : [start, start + 0.04, end - 0.02, end],
+    isFirst ? [1, 1, 0.32] : isLast ? [0.32, 1, 1] : [0.32, 1, 1, 0.32],
+  );
   const color = useTransform(
     progress,
-    [start, start + 0.06, end - 0.02, end],
-    [
-      "rgba(255,255,255,0.4)",
-      "rgb(245, 176, 65)",
-      "rgb(245, 176, 65)",
-      "rgba(255,255,255,0.4)",
-    ],
+    isFirst
+      ? [0, end - 0.02, end]
+      : isLast
+        ? [start, start + 0.06, 1]
+        : [start, start + 0.06, end - 0.02, end],
+    isFirst
+      ? ["rgb(245, 176, 65)", "rgb(245, 176, 65)", "rgba(255,255,255,0.4)"]
+      : isLast
+        ? ["rgba(255,255,255,0.4)", "rgb(245, 176, 65)", "rgb(245, 176, 65)"]
+        : [
+            "rgba(255,255,255,0.4)",
+            "rgb(245, 176, 65)",
+            "rgb(245, 176, 65)",
+            "rgba(255,255,255,0.4)",
+          ],
   );
 
   return (
-    <motion.li
-      className={cn("text-right")}
-      style={{ opacity }}
-    >
+    <motion.li className="text-right" style={{ opacity }}>
       <motion.p
         className="font-display text-sm tracking-[0.16em]"
         style={{ color }}
