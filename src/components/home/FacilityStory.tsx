@@ -1,307 +1,259 @@
 "use client";
 
 import Image from "next/image";
-import {
-  motion,
-  useReducedMotion,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import { Container } from "@/src/components/ui/Container";
 import { facilityStory } from "@/src/data/images";
-import { useSmoothedProgress } from "@/src/lib/motion";
+import { cn } from "@/src/lib/cn";
 
 const total = facilityStory.length;
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const imageVariants = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    x: direction * 56,
+    scale: 1.05,
+  }),
+  center: { opacity: 1, x: 0, scale: 1 },
+  exit: (direction: number) => ({
+    opacity: 0,
+    x: direction * -40,
+    scale: 1.02,
+  }),
+};
+
+const textVariants = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    y: direction > 0 ? 20 : -20,
+  }),
+  center: { opacity: 1, y: 0 },
+  exit: (direction: number) => ({
+    opacity: 0,
+    y: direction > 0 ? -16 : 16,
+  }),
+};
 
 export function FacilityStory() {
-  const ref = useRef<HTMLElement>(null);
-  const progress = useSmoothedProgress(ref, ["start start", "end end"]);
-  const barScale = useTransform(progress, [0, 1], [0.06, 1]);
-  const chapter = useTransform(progress, (value) =>
-    String(Math.min(total, Math.floor(value * total) + 1)).padStart(2, "0"),
+  const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const slide = facilityStory[active];
+
+  const dragX = useRef(0);
+
+  const goTo = useCallback(
+    (next: number) => {
+      const clamped = Math.max(0, Math.min(total - 1, next));
+      if (clamped === active) return;
+      setDirection(clamped > active ? 1 : -1);
+      setActive(clamped);
+    },
+    [active],
   );
 
   return (
     <section
       id="facility"
-      ref={ref}
-      className="relative h-[320vh] bg-charcoal text-white"
+      className="relative overflow-hidden bg-forest-deep text-white"
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") goTo(active - 1);
+        if (event.key === "ArrowRight") goTo(active + 1);
+      }}
     >
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
-        {facilityStory.map((slide, index) => (
-          <Slide
-            key={slide.src}
-            index={index}
-            progress={progress}
-            src={slide.src}
-            alt={slide.alt}
-            kicker={slide.kicker}
-            title={slide.title}
-            body={slide.body}
-          />
-        ))}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
 
-        <ChapterRail progress={progress} />
-
-        <div className="absolute inset-x-0 bottom-0 z-20 px-5 pb-7 sm:px-8 lg:px-10">
-          <div className="flex items-end justify-between gap-6">
-            <p className="font-display text-sm tracking-[0.18em] text-white/55">
-              <motion.span className="text-gold">{chapter}</motion.span>
-              <span className="mx-1.5 text-white/25">/</span>
-              {String(total).padStart(2, "0")}
+      <Container className="py-20 sm:py-24 lg:py-28">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
+          <div className="relative z-10 max-w-xl">
+            <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
+              <span className="h-px w-8 bg-gold" aria-hidden="true" />
+              Facility
             </p>
-            <div className="h-px min-w-0 flex-1 origin-left bg-white/15">
-              <motion.div
-                className="h-px origin-left bg-gold"
-                style={{ scaleX: barScale }}
-              />
+            <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-5xl">
+              From the line to cold storage.
+            </h2>
+
+            <div className="relative mt-10 min-h-[13.5rem] sm:min-h-[15rem]">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={slide.kicker}
+                  custom={direction}
+                  variants={textVariants}
+                  initial={reduceMotion ? { opacity: 0 } : "enter"}
+                  animate="center"
+                  exit={reduceMotion ? { opacity: 0 } : "exit"}
+                  transition={{ duration: 0.45, ease }}
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
+                    {slide.kicker}
+                  </p>
+                  <h3 className="mt-3 font-display text-2xl font-semibold leading-tight sm:text-3xl">
+                    {slide.title}
+                  </h3>
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70 sm:text-base">
+                    {slide.body}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <ol className="mt-8 hidden gap-2 sm:grid sm:grid-cols-3">
+              {facilityStory.map((item, index) => {
+                const isActive = index === active;
+                return (
+                  <li key={item.kicker}>
+                    <button
+                      type="button"
+                      onClick={() => goTo(index)}
+                      className={cn(
+                        "w-full border-t pt-3 text-left transition-colors duration-300",
+                        isActive ? "border-gold" : "border-white/15 hover:border-white/40",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "block font-display text-sm tracking-[0.16em]",
+                          isActive ? "text-gold" : "text-white/40",
+                        )}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className={cn(
+                          "mt-1 block text-[11px] uppercase tracking-[0.16em]",
+                          isActive ? "text-white" : "text-white/45",
+                        )}
+                      >
+                        {item.kicker.replace(/^\d+\s—\s/, "")}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+
+          <div className="relative">
+            <div
+              className="relative aspect-[4/5] touch-pan-y overflow-hidden rounded-sm select-none sm:aspect-[5/4] lg:aspect-[4/5] xl:aspect-[5/4]"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Facility process"
+              tabIndex={0}
+              onPointerDown={(event) => {
+                dragX.current = event.clientX;
+              }}
+              onPointerUp={(event) => {
+                const delta = event.clientX - dragX.current;
+                if (Math.abs(delta) < 48) return;
+                goTo(delta < 0 ? active + 1 : active - 1);
+              }}
+            >
+              <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                  key={slide.src}
+                  custom={direction}
+                  className="absolute inset-0"
+                  variants={imageVariants}
+                  initial={reduceMotion ? { opacity: 0 } : "enter"}
+                  animate="center"
+                  exit={reduceMotion ? { opacity: 0 } : "exit"}
+                  transition={{ duration: 0.65, ease }}
+                >
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                    priority={active === 0}
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/55 via-transparent to-forest-deep/20" />
+
+              <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between p-4 sm:p-5">
+                <p className="font-display text-sm tracking-[0.18em] text-white/80">
+                  <span className="text-gold">{String(active + 1).padStart(2, "0")}</span>
+                  <span className="mx-1.5 text-white/30">/</span>
+                  {String(total).padStart(2, "0")}
+                </p>
+                <div className="flex gap-2">
+                  <NavButton
+                    label="Previous stage"
+                    disabled={active === 0}
+                    onClick={() => goTo(active - 1)}
+                    icon={ChevronLeft}
+                  />
+                  <NavButton
+                    label="Next stage"
+                    disabled={active === total - 1}
+                    onClick={() => goTo(active + 1)}
+                    icon={ChevronRight}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {facilityStory.map((item, index) => {
+                const isActive = index === active;
+                return (
+                  <button
+                    key={item.src}
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-label={item.title}
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "relative aspect-[16/10] overflow-hidden rounded-sm ring-1 transition-all duration-300",
+                      isActive
+                        ? "ring-gold"
+                        : "ring-white/10 opacity-60 hover:opacity-100 hover:ring-white/30",
+                    )}
+                  >
+                    <Image
+                      src={item.src}
+                      alt=""
+                      fill
+                      sizes="20vw"
+                      className="object-cover"
+                    />
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
 
-function timings(index: number) {
-  const slot = 1 / total;
-  const start = index * slot;
-  const end = (index + 1) * slot;
-  const wipeStart = Math.max(0, start - slot * 0.08);
-  const wipeEnd = Math.min(1, start + slot * 0.42);
-  const textInStart = index === 0 ? 0 : start + slot * 0.12;
-  const textInEnd = index === 0 ? slot * 0.18 : start + slot * 0.48;
-  const textOutStart = end - slot * 0.22;
-  const textOutEnd = Math.min(1, end + slot * 0.06);
-
-  return {
-    start,
-    end,
-    wipeStart,
-    wipeEnd,
-    textInStart,
-    textInEnd,
-    textOutStart,
-    textOutEnd,
-  };
-}
-
-function Slide({
-  index,
-  progress,
-  src,
-  alt,
-  kicker,
-  title,
-  body,
-}: {
-  index: number;
-  progress: MotionValue<number>;
-  src: string;
-  alt: string;
-  kicker: string;
-  title: string;
-  body: string;
-}) {
-  const reduceMotion = useReducedMotion();
-  const t = timings(index);
-  const isFirst = index === 0;
-  const isLast = index === total - 1;
-
-  const clipPath = useTransform(
-    progress,
-    isFirst ? [0, 0] : [t.wipeStart, t.wipeEnd],
-    isFirst
-      ? ["inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)"]
-      : ["inset(0% 100% 0% 0%)", "inset(0% 0% 0% 0%)"],
-  );
-
-  const imageScale = useTransform(progress, [t.start, t.end], [1.12, 1.03]);
-  const imageX = useTransform(progress, [t.start, t.end], ["-2.5%", "1.5%"]);
-
-  const fade = useTransform(
-    progress,
-    isFirst
-      ? [0, 1]
-      : isLast
-        ? [t.wipeStart, t.wipeEnd, 1]
-        : [t.wipeStart, t.wipeEnd],
-    isFirst ? [1, 1] : isLast ? [0, 1, 1] : [0, 1],
-  );
-
-  const kickerY = useTransform(
-    progress,
-    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
-    isFirst ? [0, 0] : [18, 0],
-  );
-  const titleY = useTransform(
-    progress,
-    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
-    isFirst ? [0, 0] : [36, 0],
-  );
-  const bodyY = useTransform(
-    progress,
-    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
-    isFirst ? [0, 0] : [28, 0],
-  );
-
-  const textOpacity = useTransform(
-    progress,
-    isFirst
-      ? [0, t.textOutStart, t.textOutEnd]
-      : isLast
-        ? [t.textInStart, t.textInEnd, 1]
-        : [t.textInStart, t.textInEnd, t.textOutStart, t.textOutEnd],
-    isFirst ? [1, 1, 0] : isLast ? [0, 1, 1] : [0, 1, 1, 0],
-  );
-
-  const lineScale = useTransform(
-    progress,
-    isFirst ? [0, 0] : [t.textInStart, t.textInEnd],
-    isFirst ? [1, 1] : [0.15, 1],
-  );
-
-  return (
-    <motion.div
-      className="absolute inset-0"
-      style={{
-        zIndex: index,
-        opacity: reduceMotion ? fade : 1,
-      }}
-    >
-      <motion.div
-        className="absolute inset-0 overflow-hidden will-change-transform"
-        style={reduceMotion ? undefined : { clipPath }}
-      >
-        <motion.div
-          className="absolute inset-[-8%] h-[116%] w-[116%]"
-          style={
-            reduceMotion
-              ? undefined
-              : { scale: imageScale, x: imageX }
-          }
-        >
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/90 via-forest-deep/48 to-forest-deep/18" />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/70 via-transparent to-forest-deep/25" />
-      </motion.div>
-
-      <motion.div
-        className="relative flex h-full max-w-xl flex-col justify-end px-5 pb-24 sm:px-10 lg:px-16"
-        style={{ opacity: textOpacity }}
-      >
-        <motion.p
-          className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold"
-          style={reduceMotion ? undefined : { y: kickerY }}
-        >
-          <motion.span
-            className="h-px w-10 origin-left bg-gold"
-            style={reduceMotion ? undefined : { scaleX: lineScale }}
-            aria-hidden="true"
-          />
-          {kicker}
-        </motion.p>
-        <motion.h2
-          className="mt-4 font-display text-3xl font-semibold leading-tight sm:text-5xl lg:text-[3.15rem]"
-          style={reduceMotion ? undefined : { y: titleY }}
-        >
-          {title}
-        </motion.h2>
-        <motion.p
-          className="mt-4 max-w-md text-base leading-relaxed text-white/80"
-          style={reduceMotion ? undefined : { y: bodyY }}
-        >
-          {body}
-        </motion.p>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function ChapterRail({ progress }: { progress: MotionValue<number> }) {
-  const fill = useTransform(progress, [0, 1], [0, 1]);
-
-  return (
-    <div className="pointer-events-none absolute right-5 top-1/2 z-20 hidden -translate-y-1/2 lg:flex">
-      <div className="relative mr-5 h-44 w-px bg-white/15">
-        <motion.span
-          className="absolute inset-x-0 top-0 origin-top bg-gold"
-          style={{ scaleY: fill, height: "100%" }}
-        />
-      </div>
-      <ol className="flex flex-col justify-between py-0.5">
-        {facilityStory.map((slide, index) => (
-          <ChapterItem
-            key={slide.kicker}
-            index={index}
-            label={slide.kicker.replace(/^\d+\s—\s/, "")}
-            progress={progress}
-          />
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-function ChapterItem({
-  index,
+function NavButton({
   label,
-  progress,
+  disabled,
+  onClick,
+  icon: Icon,
 }: {
-  index: number;
   label: string;
-  progress: MotionValue<number>;
+  disabled: boolean;
+  onClick: () => void;
+  icon: typeof ChevronLeft;
 }) {
-  const start = index / total;
-  const end = (index + 1) / total;
-  const isFirst = index === 0;
-  const isLast = index === total - 1;
-  const opacity = useTransform(
-    progress,
-    isFirst
-      ? [0, end - 0.02, end]
-      : isLast
-        ? [start, start + 0.05, 1]
-        : [start, start + 0.04, end - 0.02, end],
-    isFirst ? [1, 1, 0.32] : isLast ? [0.32, 1, 1] : [0.32, 1, 1, 0.32],
-  );
-  const color = useTransform(
-    progress,
-    isFirst
-      ? [0, end - 0.02, end]
-      : isLast
-        ? [start, start + 0.06, 1]
-        : [start, start + 0.06, end - 0.02, end],
-    isFirst
-      ? ["rgb(245, 176, 65)", "rgb(245, 176, 65)", "rgba(255,255,255,0.4)"]
-      : isLast
-        ? ["rgba(255,255,255,0.4)", "rgb(245, 176, 65)", "rgb(245, 176, 65)"]
-        : [
-            "rgba(255,255,255,0.4)",
-            "rgb(245, 176, 65)",
-            "rgb(245, 176, 65)",
-            "rgba(255,255,255,0.4)",
-          ],
-  );
-
   return (
-    <motion.li className="text-right" style={{ opacity }}>
-      <motion.p
-        className="font-display text-sm tracking-[0.16em]"
-        style={{ color }}
-      >
-        {String(index + 1).padStart(2, "0")}
-      </motion.p>
-      <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/40">
-        {label}
-      </p>
-    </motion.li>
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-forest-deep/55 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-30"
+    >
+      <Icon className="h-5 w-5" />
+    </button>
   );
 }
