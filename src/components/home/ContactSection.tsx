@@ -11,7 +11,7 @@ export function ContactSection() {
           <SectionHeading
             eyebrow="Contact"
             title="Tell us what your market needs."
-            description="Share your volume, cuts, and destination. Our export team will respond with a tailored program."
+            description="Share your destination, product type, and quantity in kilograms. We supply chilled beef and mutton to GCC markets."
           />
           <dl className="mt-10 space-y-5 text-sm">
             <div>

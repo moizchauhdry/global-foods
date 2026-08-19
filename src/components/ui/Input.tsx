@@ -14,7 +14,7 @@ export function Input({ label, error, className, id, ...props }: Props) {
       <input
         id={inputId}
         className={cn(
-          "h-12 w-full rounded-sm border border-line bg-paper px-4 text-foreground outline-none transition-colors placeholder:text-muted/70 focus:border-forest",
+          "h-12 w-full rounded-sm border border-line bg-paper px-4 text-foreground outline-none transition-colors placeholder:text-muted/70 focus:border-forest read-only:cursor-default read-only:bg-beige/60 read-only:text-muted",
           error && "border-red-500",
           className,
         )}

@@ -44,7 +44,7 @@ export function ExportSection() {
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
           Coordinated loading, documentation, and refrigerated shipping keep
-          Pakistani halal beef and mutton in condition for buyers worldwide.
+          Pakistani halal beef and mutton in condition for buyers across the GCC.
         </p>
         <div className="mt-9">
           <Button href="#contact" variant="accent" size="lg">

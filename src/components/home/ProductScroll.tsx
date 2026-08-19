@@ -51,7 +51,7 @@ export function ProductScroll() {
           </div>
           <p className="hidden max-w-xs text-sm leading-relaxed text-white/60 lg:block">
             Scroll to move through the gallery. Each program is prepared for
-            chilled and frozen international supply.
+            chilled supply to GCC markets.
           </p>
         </Container>
 

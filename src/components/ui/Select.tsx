@@ -3,12 +3,14 @@ import { cn } from "@/src/lib/cn";
 type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   label: string;
   error?: string;
+  placeholder?: string;
   options: Array<{ label: string; value: string }>;
 };
 
 export function Select({
   label,
   error,
+  placeholder,
   options,
   className,
   id,
@@ -22,12 +24,17 @@ export function Select({
       <select
         id={inputId}
         className={cn(
-          "h-12 w-full rounded-sm border border-line bg-paper px-4 text-foreground outline-none transition-colors focus:border-forest",
+          "h-12 w-full rounded-sm border border-line bg-paper px-4 text-foreground outline-none transition-colors focus:border-forest disabled:cursor-not-allowed disabled:bg-beige/60 disabled:text-muted",
           error && "border-red-500",
           className,
         )}
         {...props}
       >
+        {placeholder ? (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        ) : null}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

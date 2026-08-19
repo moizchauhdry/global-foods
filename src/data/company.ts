@@ -30,7 +30,7 @@ export const company = {
 
 export const statistics = [
   { value: "20+", label: "Years of Experience" },
-  { value: "50+", label: "Countries Served" },
+  { value: "GCC", label: "Export Markets" },
   { value: "100%", label: "Halal Compliance" },
   { value: "24/7", label: "Cold-Chain Control" },
 ] as const;
