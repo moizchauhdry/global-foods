@@ -71,11 +71,11 @@ export function Navbar() {
   const close = () => setOpen(false);
 
   return (
-    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 text-white lg:fixed">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 text-white">
       <div className="pointer-events-auto relative z-50 pt-[env(safe-area-inset-top)]">
         <motion.div
           aria-hidden
-          className="nav-sticky-layer absolute inset-0 max-lg:hidden"
+          className="nav-sticky-layer absolute inset-0"
           style={{ opacity: open ? 1 : layerOpacity }}
         />
         <Container className="relative flex h-16 items-center justify-between gap-3 sm:h-20 sm:gap-6">
