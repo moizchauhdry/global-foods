@@ -7,16 +7,131 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Container } from "@/src/components/ui/Container";
 import { productGallery } from "@/src/data/images";
 import { useSmoothedProgress } from "@/src/lib/motion";
 
 const count = productGallery.length;
 const span = count - 1;
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export function ProductScroll() {
-  const ref = useRef<HTMLElement>(null);
+  return (
+    <section id="products" className="relative bg-forest-deep text-white">
+      <MobileGallery />
+      <DesktopGallery />
+    </section>
+  );
+}
+
+function MobileGallery() {
+  const [active, setActive] = useState(0);
+  const dragX = useRef(0);
+
+  const goTo = useCallback((next: number) => {
+    setActive(Math.max(0, Math.min(count - 1, next)));
+  }, []);
+
+  return (
+    <div className="lg:hidden">
+      <Container className="pt-24 pb-8">
+        <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
+          <span className="h-px w-8 bg-gold" aria-hidden="true" />
+          Products
+        </p>
+        <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight">
+          Beef and mutton, cut for export.
+        </h2>
+      </Container>
+
+      <div
+        className="relative overflow-hidden touch-pan-y select-none"
+        onPointerDown={(event) => {
+          dragX.current = event.clientX;
+        }}
+        onPointerUp={(event) => {
+          const delta = event.clientX - dragX.current;
+          if (Math.abs(delta) < 48) return;
+          goTo(delta < 0 ? active + 1 : active - 1);
+        }}
+      >
+        <motion.div
+          className="flex touch-pan-y"
+          animate={{ x: `${-active * 100}%` }}
+          transition={{ duration: 0.45, ease }}
+        >
+          {productGallery.map((item, index) => (
+            <article
+              key={item.src}
+              className="relative w-full shrink-0 px-5"
+            >
+              <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/92 via-forest-deep/20 to-transparent" />
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-sm ring-1 ring-inset ring-gold/70"
+                  style={{ opacity: active === index ? 1 : 0 }}
+                />
+                <div className="absolute inset-x-0 bottom-0 p-6">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-gold">
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 max-w-md text-sm text-white/75">
+                    {item.caption}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </motion.div>
+      </div>
+
+      <div className="px-5 pt-6 pb-16">
+        <div className="flex items-end gap-5">
+          <p className="shrink-0 font-display text-sm tracking-[0.18em] text-white/55">
+            <span className="text-gold">
+              {String(active + 1).padStart(2, "0")}
+            </span>
+            <span className="mx-1.5 text-white/25">/</span>
+            {String(count).padStart(2, "0")}
+          </p>
+          <div className="grid min-w-0 flex-1 grid-cols-4 gap-2">
+            {productGallery.map((item, index) => (
+              <button
+                key={item.title}
+                type="button"
+                aria-label={item.title}
+                aria-current={active === index ? "true" : undefined}
+                className="min-w-0"
+                onClick={() => goTo(index)}
+              >
+                <div className="h-px bg-white/15">
+                  <div
+                    className="h-px origin-left bg-gold transition-transform duration-300"
+                    style={{ transform: `scaleX(${active >= index ? 1 : 0})` }}
+                  />
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DesktopGallery() {
+  const ref = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [travel, setTravel] = useState(0);
   const progress = useSmoothedProgress(ref, ["start start", "end end"]);
@@ -45,13 +160,9 @@ export function ProductScroll() {
   }, []);
 
   return (
-    <section
-      id="products"
-      ref={ref}
-      className="relative h-[300vh] bg-forest-deep text-white"
-    >
+    <div ref={ref} className="relative hidden h-[300vh] lg:block">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
-        <Container className="flex items-end justify-between gap-8 pt-24 pb-12 sm:pt-28 sm:pb-16">
+        <Container className="flex items-end justify-between gap-8 pt-28 pb-16">
           <motion.div style={{ y: headingY }}>
             <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
               <span className="h-px w-8 bg-gold" aria-hidden="true" />
@@ -104,7 +215,7 @@ export function ProductScroll() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
