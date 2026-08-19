@@ -19,7 +19,6 @@ type FormState = {
   country: string;
   city: string;
   productType: string;
-  temperature: string;
   quantity: string;
   message: string;
 };
@@ -32,7 +31,6 @@ const initialState: FormState = {
   country: "",
   city: "",
   productType: "",
-  temperature: "Chilled",
   quantity: "",
   message: "",
 };
@@ -158,12 +156,6 @@ export function ContactForm() {
           error={errors.productType}
           placeholder="Select product type"
           options={[...productTypes]}
-        />
-        <Input
-          label="Temperature"
-          name="temperature"
-          value="Chilled"
-          readOnly
         />
         <Input
           label="Quantity (kg)"
