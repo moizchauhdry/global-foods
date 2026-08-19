@@ -51,7 +51,7 @@ export function ProductScroll() {
       className="relative h-[300vh] bg-forest-deep text-white"
     >
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
-        <Container className="flex items-end justify-between gap-8 pt-24 pb-5 sm:pt-28">
+        <Container className="flex items-end justify-between gap-8 pt-24 pb-12 sm:pt-28 sm:pb-16">
           <motion.div style={{ y: headingY }}>
             <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
               <span className="h-px w-8 bg-gold" aria-hidden="true" />
@@ -70,7 +70,7 @@ export function ProductScroll() {
         <div className="relative flex-1 [perspective:1400px]">
           <motion.div
             ref={trackRef}
-            className="absolute top-3 flex h-[calc(100%-2.5rem)] items-stretch gap-4 pl-[8vw] pr-[18vw] will-change-transform sm:gap-5 lg:gap-6"
+            className="absolute top-6 flex h-[calc(100%-5rem)] items-stretch gap-4 pl-[8vw] pr-[18vw] will-change-transform sm:gap-5 lg:gap-6"
             style={{ x, transformStyle: "preserve-3d" }}
           >
             {productGallery.map((item, index) => (
@@ -84,7 +84,7 @@ export function ProductScroll() {
           </motion.div>
         </div>
 
-        <div className="px-5 pb-8 sm:px-8 lg:px-10">
+        <div className="px-5 pt-4 pb-10 sm:px-8 sm:pb-12 lg:px-10">
           <div className="flex items-end gap-5">
             <p className="shrink-0 font-display text-sm tracking-[0.18em] text-white/55">
               <motion.span className="text-gold">{chapter}</motion.span>
