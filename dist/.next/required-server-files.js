@@ -64,13 +64,7 @@ self.__SERVER_FILES_MANIFEST={
           "search": ""
         }
       ],
-      "remotePatterns": [
-        {
-          "protocol": "https",
-          "hostname": "images.unsplash.com",
-          "pathname": "/**"
-        }
-      ],
+      "remotePatterns": [],
       "qualities": [
         75
       ],

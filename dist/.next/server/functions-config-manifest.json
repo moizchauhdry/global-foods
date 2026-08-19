@@ -1,7 +1,6 @@
 {
   "version": 1,
   "functions": {
-    "/api/contact": {},
-    "/api/quote": {}
+    "/api/contact": {}
   }
 }
