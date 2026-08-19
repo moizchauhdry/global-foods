@@ -66,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       "@type": "PostalAddress",
       addressCountry: "PK",
       addressLocality: company.headquarters,
+      postalCode: company.postalCode,
       streetAddress: company.address,
     },
     email: company.email,

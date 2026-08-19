@@ -39,7 +39,9 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-2 text-sm text-white/65">
               <li>{company.address}</li>
-              <li>{company.headquarters}</li>
+              <li>
+                {company.headquarters} {company.postalCode}
+              </li>
               <li>
                 <a href={`mailto:${company.email}`} className="hover:text-white">
                   {company.email}

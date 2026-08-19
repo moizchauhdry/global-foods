@@ -21,7 +21,7 @@ export function BrandLogo({
   const logo = (
     <Image
       src="/images/logo.png"
-      alt="Umme Yusra Global Foods (Pvt) Limited"
+      alt="Umme Yusra Global Foods (Pvt) Ltd"
       width={variant === "compact" ? 160 : 220}
       height={variant === "compact" ? 56 : 78}
       priority={priority}

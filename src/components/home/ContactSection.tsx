@@ -21,7 +21,7 @@ export function ContactSection() {
               <dd className="mt-1 leading-relaxed text-muted">
                 {company.address}
                 <br />
-                {company.headquarters}
+                {company.headquarters} {company.postalCode}
               </dd>
             </div>
             <div>

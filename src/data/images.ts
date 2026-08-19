@@ -5,7 +5,7 @@
 export const images = {
   logo: {
     src: "/images/logo.png",
-    alt: "Umme Yusra Global Foods (Pvt) Limited",
+    alt: "Umme Yusra Global Foods (Pvt) Ltd",
   },
   slaughterHouse: {
     src: "/images/slaughter-house.jpeg",
