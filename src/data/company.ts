@@ -48,11 +48,12 @@ export const company = {
 } as const;
 
 export const highlights = [
-  "Quality from source",
-  "Halal integrity",
-  "Cold-chain handling",
-  "Secure packaging",
-  "Air-freight export",
+  { label: "Quality from", value: "Source to Shipment" },
+  { label: "Halal", value: "Integrity" },
+  { label: "Controlled", value: "Cold-Chain Handling" },
+  { label: "Secure Export", value: "Packaging" },
+  { label: "Reliable", value: "Air-Freight Export" },
+  { label: "Your Trusted", value: "Export Partner" },
 ] as const;
 
 export const navLinks = [

@@ -29,11 +29,14 @@ export function Intro() {
             <p className="mt-6 max-w-xl text-base leading-relaxed text-muted">
               {company.connecting}
             </p>
-            <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <ul className="mt-8 grid max-w-xl grid-cols-3 gap-x-4 gap-y-5">
               {highlights.map((item) => (
-                <li key={item} className="border-t border-line pt-4">
-                  <p className="text-sm font-medium leading-snug text-forest-deep">
-                    {item}
+                <li key={item.value} className="min-w-0 border-t border-line pt-2">
+                  <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.12em] text-muted">
+                    {item.label}
+                  </p>
+                  <p className="mt-1.5 text-sm font-semibold leading-snug tracking-tight text-forest-deep sm:text-base">
+                    {item.value}
                   </p>
                 </li>
               ))}
