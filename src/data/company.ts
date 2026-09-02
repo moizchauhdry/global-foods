@@ -30,8 +30,8 @@ export const company = {
   partnerCommitment:
     "With careful sourcing, veterinary oversight, Halal compliance, controlled-temperature handling, secure packaging, and reliable air-freight coordination, Umme Yusra Global Foods (Pvt) Ltd is committed to building long-term relationships with importers, distributors, wholesalers, retailers, and food-service businesses worldwide.",
   headquarters: "Lahore, Pakistan",
-  address: "Office No 23, Basti Charagh Shah, Airport Road (Near Shah Nawaz Motors)",
-  street: "Basti Charagh Shah",
+  address: "House No 45, Block C, Divine Garden, Airport Road",
+  street: "House No 45, Block C, Divine Garden",
   postalCode: "54000",
   phone: "+92 329 997355",
   email: "info@ummeyusrafoods.com",
