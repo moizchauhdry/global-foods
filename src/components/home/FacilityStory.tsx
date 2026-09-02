@@ -5,10 +5,10 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { Container } from "@/src/components/ui/Container";
-import { facilityStory } from "@/src/data/images";
+import { qualityStory } from "@/src/data/images";
 import { cn } from "@/src/lib/cn";
 
-const total = facilityStory.length;
+const total = qualityStory.length;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const imageVariants = {
@@ -41,7 +41,7 @@ export function FacilityStory() {
   const reduceMotion = useReducedMotion();
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
-  const slide = facilityStory[active];
+  const slide = qualityStory[active];
 
   const dragX = useRef(0);
 
@@ -57,7 +57,7 @@ export function FacilityStory() {
 
   return (
     <section
-      id="facility"
+      id="quality"
       className="relative overflow-hidden bg-forest-deep text-white"
       onKeyDown={(event) => {
         if (event.key === "ArrowLeft") goTo(active - 1);
@@ -71,13 +71,13 @@ export function FacilityStory() {
           <div className="relative z-10 max-w-xl">
             <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-gold">
               <span className="h-px w-8 bg-gold" aria-hidden="true" />
-              Facility
+              Quality
             </p>
             <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-5xl">
-              From the line to cold storage.
+              Quality from Source to Shipment
             </h2>
 
-            <div className="relative mt-10 min-h-[13.5rem] sm:min-h-[15rem]">
+            <div className="relative mt-10 min-h-[20rem] sm:min-h-[22rem]">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={slide.kicker}
@@ -94,15 +94,20 @@ export function FacilityStory() {
                   <h3 className="mt-3 font-display text-2xl font-semibold leading-tight sm:text-3xl">
                     {slide.title}
                   </h3>
-                  <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70 sm:text-base">
-                    {slide.body}
-                  </p>
+                  {slide.paragraphs.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="mt-4 max-w-md text-sm leading-relaxed text-white/70 sm:text-base"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <ol className="mt-8 hidden gap-2 sm:grid sm:grid-cols-3">
-              {facilityStory.map((item, index) => {
+            <ol className="mt-8 hidden gap-2 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+              {qualityStory.map((item, index) => {
                 const isActive = index === active;
                 return (
                   <li key={item.kicker}>
@@ -142,7 +147,7 @@ export function FacilityStory() {
               className="relative aspect-[4/5] touch-pan-y overflow-hidden rounded-sm select-none sm:aspect-[5/4] lg:aspect-[4/5] xl:aspect-[5/4]"
               role="region"
               aria-roledescription="carousel"
-              aria-label="Facility process"
+              aria-label="Quality process"
               tabIndex={0}
               onPointerDown={(event) => {
                 dragX.current = event.clientX;
@@ -199,8 +204,8 @@ export function FacilityStory() {
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              {facilityStory.map((item, index) => {
+            <div className="mt-4 grid grid-cols-4 gap-3">
+              {qualityStory.map((item, index) => {
                 const isActive = index === active;
                 return (
                   <button

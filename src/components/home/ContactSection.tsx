@@ -6,7 +6,6 @@ import { ContactForm } from "@/src/components/forms/ContactForm";
 import { Reveal } from "@/src/components/animations/Reveal";
 import { Container } from "@/src/components/ui/Container";
 import { company } from "@/src/data/company";
-import { enquiryCountries } from "@/src/data/enquiry";
 import { images } from "@/src/data/images";
 
 const contacts = [
@@ -28,12 +27,6 @@ const contacts = [
     href: `tel:${company.phone.replace(/\s+/g, "")}`,
     icon: Phone,
   },
-] as const;
-
-const nextSteps = [
-  "Share destination, product, and volume.",
-  "We review cuts, packing, and timing.",
-  "You receive a tailored chilled program.",
 ] as const;
 
 export function ContactSection() {
@@ -62,11 +55,10 @@ export function ContactSection() {
                   Export enquiry
                 </p>
                 <h2 className="mt-4 max-w-md font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-[2.6rem]">
-                  Tell us what your market needs.
+                  Your Trusted Export Partner
                 </h2>
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-white/75 sm:text-base">
-                  Chilled beef and mutton for GCC buyers. Share destination,
-                  product type, and quantity in kilograms.
+                  {company.partnerGoal}
                 </p>
               </Reveal>
 
@@ -107,32 +99,9 @@ export function ContactSection() {
                   })}
                 </ul>
 
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-                    GCC markets
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {enquiryCountries.map((country) => (
-                      <span
-                        key={country.value}
-                        className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.12em] text-white/80"
-                      >
-                        {country.label}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <ol className="space-y-3 border-t border-white/10 pt-6">
-                  {nextSteps.map((step, index) => (
-                    <li key={step} className="flex gap-3 text-sm text-white/70">
-                      <span className="font-display text-gold">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
+                <p className="border-t border-white/10 pt-6 text-sm leading-relaxed text-white/70">
+                  {company.partnerCommitment}
+                </p>
               </Reveal>
             </div>
           </aside>
@@ -143,8 +112,8 @@ export function ContactSection() {
                 Request a quote
               </p>
               <p className="mt-2 max-w-lg text-sm text-muted">
-                Complete the form and our team will come back with a program for
-                your destination.
+                Complete the form and our team will respond to your export
+                enquiry.
               </p>
               <div className="mt-8">
                 <ContactForm />

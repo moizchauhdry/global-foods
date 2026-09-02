@@ -23,12 +23,12 @@ const display = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(company.website),
   title: {
-    default: `Premium Halal Meat Exporter from Pakistan | ${company.legalName}`,
+    default: `${company.tagline} | ${company.legalName}`,
     template: `%s | ${company.name}`,
   },
   description: company.description,
   openGraph: {
-    title: `Premium Halal Meat Exporter from Pakistan | ${company.legalName}`,
+    title: `${company.tagline} | ${company.legalName}`,
     description: company.description,
     url: company.website,
     siteName: company.legalName,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Premium Halal Meat Exporter from Pakistan | ${company.legalName}`,
+    title: `${company.tagline} | ${company.legalName}`,
     description: company.description,
   },
   robots: {

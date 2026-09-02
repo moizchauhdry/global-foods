@@ -5,7 +5,7 @@ import { BrandLogo } from "@/src/components/shared/BrandLogo";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
 import { company, navLinks } from "@/src/data/company";
-import { enquiryCountries, productTypes } from "@/src/data/enquiry";
+import { productTypes } from "@/src/data/enquiry";
 
 const contacts = [
   {
@@ -47,7 +47,7 @@ export function Footer() {
               Export enquiry
             </p>
             <p className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              Specify a chilled beef or mutton program for your market.
+              Your Trusted Export Partner
             </p>
           </div>
           <Button
@@ -67,8 +67,7 @@ export function Footer() {
               <BrandLogo href="#home" />
             </div>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">
-              Chilled halal beef and mutton from Pakistan, prepared for buyers
-              across the GCC.
+              {company.description}
             </p>
             <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
               {company.legalName}
@@ -110,7 +109,7 @@ export function Footer() {
                     {product.label}
                   </a>
                   <span className="mt-0.5 block text-xs text-white/35">
-                    Chilled export
+                    Fresh chilled
                   </span>
                 </li>
               ))}
@@ -119,17 +118,11 @@ export function Footer() {
 
           <div className="lg:col-span-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
-              GCC markets
+              Export
             </p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {enquiryCountries.map((country) => (
-                <li key={country.value}>
-                  <span className="inline-flex rounded-full border border-white/12 bg-white/[0.04] px-3 py-1.5 text-[11px] uppercase tracking-[0.12em] text-white/70">
-                    {country.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <p className="mt-5 text-sm leading-relaxed text-white/70">
+              {company.airFreight}
+            </p>
           </div>
         </div>
 
@@ -180,7 +173,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {company.legalName}
           </p>
-          <p>Pakistan · Halal · Chilled GCC export</p>
+          <p>{company.motto}</p>
         </div>
       </Container>
     </footer>

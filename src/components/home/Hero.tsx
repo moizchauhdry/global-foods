@@ -37,9 +37,9 @@ export function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.12 }}
-            className="text-xs font-semibold uppercase tracking-[0.32em] text-gold"
+            className="text-xs font-semibold uppercase tracking-[0.18em] text-gold sm:tracking-[0.22em]"
           >
-            Premium Halal Meat · Pakistan
+            {company.motto}
           </motion.p>
 
           <motion.p
@@ -66,8 +66,7 @@ export function Hero() {
             transition={{ duration: 1, ease, delay: 0.5 }}
             className="mt-6 max-w-2xl text-base leading-relaxed text-white/82 sm:text-lg"
           >
-            Halal beef and mutton, processed to international standards and
-            delivered through a disciplined global cold chain.
+            {company.description}
           </motion.p>
 
           <motion.div

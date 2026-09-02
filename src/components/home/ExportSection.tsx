@@ -5,6 +5,7 @@ import { motion, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/src/components/ui/Button";
 import { Container } from "@/src/components/ui/Container";
+import { company } from "@/src/data/company";
 import { images } from "@/src/data/images";
 import { useSmoothedProgress } from "@/src/lib/motion";
 
@@ -37,14 +38,16 @@ export function ExportSection() {
 
       <Container className="relative flex min-h-[100svh] flex-col justify-end py-24 sm:justify-center">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold">
-          Global Export
+          Reliable Air-Freight Export
         </p>
         <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold leading-tight sm:text-5xl">
-          From the plant to the reefer container.
+          Your Trusted Export Partner
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-          Coordinated loading, documentation, and refrigerated shipping keep
-          Pakistani halal beef and mutton in condition for buyers across the GCC.
+          {company.airFreight}
+        </p>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+          {company.partnerGoal}
         </p>
         <div className="mt-9">
           <Button href="#contact" variant="accent" size="lg">

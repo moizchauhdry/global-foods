@@ -1,3 +1,5 @@
+import { company } from "@/src/data/company";
+
 /**
  * Local photography from /public/images.
  * Halal-safe only: cattle, sheep/goat, beef/mutton product imagery.
@@ -9,90 +11,88 @@ export const images = {
   },
   slaughterHouse: {
     src: "/images/slaughter-house.jpeg",
-    alt: "Hygienic halal processing floor with stainless production lines",
+    alt: "Halal slaughter and handling area",
   },
   packagingLine: {
     src: "/images/slaughter-house-2.jpeg",
-    alt: "Vacuum packaging line sealing premium beef steaks",
+    alt: "Meat packed for export",
   },
   beefProcessing: {
     src: "/images/beef-1.jpeg",
-    alt: "Premium beef cuts prepared on a stainless processing table",
+    alt: "Fresh chilled beef",
   },
   beefCuts: {
     src: "/images/beef-2.jpeg",
-    alt: "Export-ready premium beef steaks, roast, and medallions",
+    alt: "Fresh chilled beef prepared for export",
   },
   muttonProcessing: {
     src: "/images/mutton-1.jpeg",
-    alt: "Mutton racks, steaks, and a leg roast prepared for packing",
+    alt: "Fresh chilled mutton",
   },
   muttonFacility: {
     src: "/images/mutton-2.jpeg",
-    alt: "Mutton and beef cuts staged in a hygienic processing hall",
+    alt: "Fresh chilled mutton prepared for export",
   },
   muttonCuts: {
     src: "/images/mutton-3.jpeg",
-    alt: "Premium mutton chops, leg, roast, and rack of lamb",
+    alt: "Fresh chilled mutton cuts",
   },
   muttonSelection: {
     src: "/images/mutton-4.jpeg",
-    alt: "Gourmet mutton chops, racks, and roast on a slate platter",
+    alt: "Fresh chilled mutton selection",
   },
   inspection: {
     src: "/images/meat-inspection.jpeg",
-    alt: "Quality technician checking meat temperature in the inspection room",
+    alt: "Veterinary inspection and quality checks",
   },
   coldStorage: {
     src: "/images/cold-storage.jpeg",
-    alt: "Temperature-controlled cold storage warehouse with pallet racking",
+    alt: "Controlled cold-chain storage",
   },
   export: {
     src: "/images/export-container.jpeg",
-    alt: "Refrigerated export container being loaded at port at sunset",
+    alt: "Export shipment prepared for air-freight dispatch",
   },
 } as const;
 
 export const productGallery = [
   {
     ...images.beefCuts,
-    title: "Premium Beef",
-    caption: "Ribeye, tenderloin, and export steaks cut for international buyers.",
-  },
-  {
-    ...images.muttonProcessing,
-    title: "Mutton Programs",
-    caption: "Racks, legs, and primal cuts prepared under hygienic controls.",
+    title: "Fresh Chilled Beef",
+    caption:
+      "Export-quality Halal beef, supplied fresh chilled for international buyers.",
   },
   {
     ...images.muttonCuts,
-    title: "Signature Mutton",
-    caption: "Chops, roast, and rack selections for premium market programs.",
-  },
-  {
-    ...images.muttonSelection,
-    title: "Gourmet Selection",
-    caption: "Presentation-ready cuts for foodservice and retail partners.",
+    title: "Fresh Chilled Mutton",
+    caption:
+      "Export-quality Halal mutton, supplied fresh chilled for international buyers.",
   },
 ] as const;
 
-export const facilityStory = [
-  {
-    ...images.packagingLine,
-    kicker: "01 — Processing",
-    title: "Hygienic lines. Export-ready packs.",
-    body: "Stainless processing and vacuum packaging keep product integrity from the line to the carton.",
-  },
+export const qualityStory = [
   {
     ...images.inspection,
-    kicker: "02 — Inspection",
-    title: "Quality checked at every handoff.",
-    body: "Temperature, trim, and documentation checks support the food-safety discipline international buyers expect.",
+    kicker: "01 — Quality",
+    title: "Quality from Source to Shipment",
+    paragraphs: [company.quality, company.veterinary],
+  },
+  {
+    ...images.slaughterHouse,
+    kicker: "02 — Halal",
+    title: "Halal Integrity",
+    paragraphs: [company.halal],
   },
   {
     ...images.coldStorage,
     kicker: "03 — Cold chain",
-    title: "Held at temperature until dispatch.",
-    body: "Chilled storage and organised dispatch protect condition from the facility through to the container.",
+    title: "Controlled Cold-Chain Handling",
+    paragraphs: [company.coldChain, company.coldChainFocus],
+  },
+  {
+    ...images.packagingLine,
+    kicker: "04 — Packaging",
+    title: "Secure Export Packaging",
+    paragraphs: [company.packaging],
   },
 ] as const;

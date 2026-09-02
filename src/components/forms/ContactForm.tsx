@@ -1,17 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Check } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/src/components/ui/Button";
 import { Input } from "@/src/components/ui/Input";
-import { Select } from "@/src/components/ui/Select";
 import { Textarea } from "@/src/components/ui/Textarea";
-import {
-  enquiryCountries,
-  getEnquiryCountry,
-  productTypes,
-} from "@/src/data/enquiry";
+import { productTypes } from "@/src/data/enquiry";
 import { cn } from "@/src/lib/cn";
 
 type FormState = {
@@ -20,7 +15,6 @@ type FormState = {
   email: string;
   phone: string;
   country: string;
-  city: string;
   productType: string;
   quantity: string;
   message: string;
@@ -32,7 +26,6 @@ const initialState: FormState = {
   email: "",
   phone: "",
   country: "",
-  city: "",
   productType: "",
   quantity: "",
   message: "",
@@ -45,31 +38,9 @@ export function ContactForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
 
-  const selectedCountry = getEnquiryCountry(form.country);
-  const cityOptions = useMemo(
-    () =>
-      (selectedCountry?.cities ?? []).map((city) => ({
-        label: city,
-        value: city,
-      })),
-    [selectedCountry],
-  );
-  const requiresCity = Boolean(selectedCountry && selectedCountry.cities.length > 0);
-
   const update = (key: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
-  };
-
-  const updateCountry = (value: string) => {
-    const nextCountry = getEnquiryCountry(value);
-    const cities = nextCountry?.cities ?? [];
-    setForm((prev) => ({
-      ...prev,
-      country: value,
-      city: cities.length === 1 ? cities[0] : "",
-    }));
-    setErrors((prev) => ({ ...prev, country: undefined, city: undefined }));
   };
 
   const validate = () => {
@@ -78,8 +49,7 @@ export function ContactForm() {
     if (!form.company.trim()) next.company = "Company is required.";
     if (!form.email.includes("@")) next.email = "Enter a valid email.";
     if (!form.phone.trim()) next.phone = "Phone is required.";
-    if (!form.country) next.country = "Country is required.";
-    if (requiresCity && !form.city) next.city = "City is required.";
+    if (!form.country.trim()) next.country = "Destination is required.";
     if (!form.productType) next.productType = "Select beef or mutton.";
     if (!form.quantity.trim()) next.quantity = "Quantity is required.";
     else if (Number(form.quantity) <= 0) next.quantity = "Enter quantity in kilograms.";
@@ -104,7 +74,7 @@ export function ContactForm() {
         </h3>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base">
           Thank you. Our export team will review the destination, product, and
-          volume and respond with a tailored chilled program.
+          volume and respond to your enquiry.
         </p>
         <Button
           type="button"
@@ -202,43 +172,15 @@ export function ContactForm() {
           <span className="font-display text-sm tracking-normal text-gold">02</span>
           Shipment
         </legend>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Select
-            label="Country"
-            name="country"
-            value={form.country}
-            onChange={(e) => updateCountry(e.target.value)}
-            error={errors.country}
-            placeholder="Select destination"
-            options={enquiryCountries.map((country) => ({
-              label: country.label,
-              value: country.value,
-            }))}
-          />
-          <AnimatePresence initial={false} mode="popLayout">
-            {requiresCity ? (
-              <motion.div
-                key="city"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <Select
-                  label="City"
-                  name="city"
-                  value={form.city}
-                  onChange={(e) => update("city", e.target.value)}
-                  error={errors.city}
-                  placeholder="Select city"
-                  options={cityOptions}
-                />
-              </motion.div>
-            ) : (
-              <div className="hidden sm:block" aria-hidden="true" />
-            )}
-          </AnimatePresence>
-        </div>
+        <Input
+          label="Destination"
+          name="country"
+          autoComplete="country-name"
+          placeholder="Country or city"
+          value={form.country}
+          onChange={(e) => update("country", e.target.value)}
+          error={errors.country}
+        />
 
         <div>
           <p
@@ -285,7 +227,7 @@ export function ContactForm() {
                     </span>
                   </span>
                   <span className="mt-1 block text-xs text-muted">
-                    Chilled export program
+                    Fresh chilled
                   </span>
                 </button>
               );
@@ -317,7 +259,7 @@ export function ContactForm() {
         value={form.message}
         onChange={(e) => update("message", e.target.value)}
         error={errors.message}
-        placeholder="Cuts, packing, and preferred timing."
+        placeholder="Product details and destination requirements."
       />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -332,7 +274,7 @@ export function ContactForm() {
           {sending ? null : <ArrowUpRight className="h-4 w-4" />}
         </Button>
         <p className="text-xs leading-relaxed text-muted sm:max-w-[16rem] sm:text-right">
-          We typically respond within one business day with a tailored supply program.
+          We typically respond within one business day.
         </p>
       </div>
       {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}

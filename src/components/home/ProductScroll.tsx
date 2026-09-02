@@ -41,7 +41,7 @@ function MobileGallery() {
           Products
         </p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight">
-          Beef and mutton, cut for export.
+          Fresh chilled beef and mutton.
         </h2>
       </Container>
 
@@ -105,7 +105,7 @@ function MobileGallery() {
             <span className="mx-1.5 text-white/25">/</span>
             {String(count).padStart(2, "0")}
           </p>
-          <div className="grid min-w-0 flex-1 grid-cols-4 gap-2">
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
             {productGallery.map((item, index) => (
               <button
                 key={item.title}
@@ -160,7 +160,7 @@ function DesktopGallery() {
   }, []);
 
   return (
-    <div ref={ref} className="relative hidden h-[300vh] lg:block">
+    <div ref={ref} className="relative hidden h-[180vh] lg:block">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         <Container className="flex items-end justify-between gap-8 pt-28 pb-16">
           <motion.div style={{ y: headingY }}>
@@ -169,12 +169,11 @@ function DesktopGallery() {
               Products
             </p>
             <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-5xl">
-              Beef and mutton, cut for export.
+              Fresh chilled beef and mutton.
             </h2>
           </motion.div>
           <p className="hidden max-w-xs text-sm leading-relaxed text-white/60 lg:block">
-            Scroll to move through the gallery. Each program is prepared for
-            chilled supply to GCC markets.
+            Carefully sourced, export-quality Halal meat from Pakistan.
           </p>
         </Container>
 
@@ -202,7 +201,7 @@ function DesktopGallery() {
               <span className="mx-1.5 text-white/25">/</span>
               {String(count).padStart(2, "0")}
             </p>
-            <div className="grid min-w-0 flex-1 grid-cols-4 gap-2">
+            <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
               {productGallery.map((item, index) => (
                 <Segment
                   key={item.title}

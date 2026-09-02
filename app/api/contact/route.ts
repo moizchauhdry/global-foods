@@ -11,7 +11,6 @@ export async function POST(request: Request) {
     const email = readString(body.email, 160);
     const phone = readString(body.phone, 80);
     const country = readString(body.country, 80);
-    const city = readString(body.city, 80);
     const productType = readString(body.productType, 80);
     const quantity = readString(body.quantity, 40);
     const message = readString(body.message, 5000);
@@ -31,8 +30,7 @@ export async function POST(request: Request) {
         ["Company", company],
         ["Email", email],
         ["Phone", phone],
-        ["Country", country],
-        ["City", city || "—"],
+        ["Destination", country],
         ["Product type", productType],
         ["Quantity (kg)", quantity],
       ],

@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { Reveal } from "@/src/components/animations/Reveal";
 import { Container } from "@/src/components/ui/Container";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
-import { company, statistics } from "@/src/data/company";
+import { company, highlights } from "@/src/data/company";
 import { images } from "@/src/data/images";
 import { useSmoothedProgress } from "@/src/lib/motion";
 
@@ -23,26 +23,21 @@ export function Intro() {
           <Reveal>
             <SectionHeading
               eyebrow="The Company"
-              title="Halal processing built for international buyers."
+              title={company.legalName}
               description={company.description}
             />
             <p className="mt-6 max-w-xl text-base leading-relaxed text-muted">
-              From livestock sourcing through inspection, processing, and
-              refrigerated dispatch, every stage is designed around hygiene,
-              traceability, and consistent product quality.
+              {company.connecting}
             </p>
-            <dl className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              {statistics.map((stat) => (
-                <div key={stat.label} className="border-t border-line pt-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-muted">
-                    {stat.label}
-                  </dt>
-                  <dd className="mt-2 font-display text-3xl font-semibold text-forest-deep">
-                    {stat.value}
-                  </dd>
-                </div>
+            <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {highlights.map((item) => (
+                <li key={item} className="border-t border-line pt-4">
+                  <p className="text-sm font-medium leading-snug text-forest-deep">
+                    {item}
+                  </p>
+                </li>
               ))}
-            </dl>
+            </ul>
           </Reveal>
 
           <div ref={ref} className="relative mx-auto h-[34rem] w-full max-w-xl lg:h-[38rem]">
