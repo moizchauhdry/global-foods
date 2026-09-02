@@ -103,7 +103,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/macmini/Sites/global-foods",
+    "outputFileTracingRoot": "/Users/macmini/Sites/umme-yusra-foods-website",
     "enablePrerenderSourceMaps": true,
     "cacheComponents": false,
     "cacheLife": {
@@ -321,13 +321,13 @@ self.__SERVER_FILES_MANIFEST={
     "serverExternalPackages": [
       "nodemailer"
     ],
-    "repoRoot": "/Users/macmini/Sites/global-foods",
+    "repoRoot": "/Users/macmini/Sites/umme-yusra-foods-website",
     "turbopack": {
-      "root": "/Users/macmini/Sites/global-foods"
+      "root": "/Users/macmini/Sites/umme-yusra-foods-website"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "/Users/macmini/Sites/global-foods",
+  "appDir": "/Users/macmini/Sites/umme-yusra-foods-website",
   "relativeAppDir": "",
   "files": [
     ".next/package.json",
