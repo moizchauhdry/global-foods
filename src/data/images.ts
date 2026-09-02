@@ -50,8 +50,8 @@ export const images = {
     alt: "Controlled cold-chain storage",
   },
   export: {
-    src: "/images/export-container.jpeg",
-    alt: "Export shipment prepared for air-freight dispatch",
+    src: "/images/airplane-meat-export.jpeg",
+    alt: "Halal meat pallets being loaded for international air-freight export",
   },
 } as const;
 
