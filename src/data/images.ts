@@ -63,10 +63,22 @@ export const productGallery = [
       "Export-quality Halal beef, supplied fresh chilled for international buyers.",
   },
   {
+    ...images.beefProcessing,
+    title: "Halal Beef Export",
+    caption:
+      "Carefully sourced beef prepared for international air-freight export.",
+  },
+  {
     ...images.muttonCuts,
     title: "Fresh Chilled Mutton",
     caption:
       "Export-quality Halal mutton, supplied fresh chilled for international buyers.",
+  },
+  {
+    ...images.muttonSelection,
+    title: "Halal Mutton Export",
+    caption:
+      "Carefully sourced mutton prepared for international air-freight export.",
   },
 ] as const;
 
